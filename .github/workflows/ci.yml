@@ -20,11 +20,7 @@ jobs:
       fail-fast: true
       matrix:
         pythonVersion:
-          - 'py37'
-          - 'py38'
           - 'py39'
-          - 'py310'
-          - 'py311'
         tidbVersion:
           - 'v4.0.15'
           - 'v5.0.3'
