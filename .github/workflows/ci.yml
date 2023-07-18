@@ -17,15 +17,26 @@ jobs:
             bash -c "pwd && ls && cat /etc/os-release && tox -e lint"
   tests:
     strategy:
+      fail-fast: true
       matrix:
-        python-version: ['py37', 'py38', 'py39', 'py310', 'py311']
-        tidb-version: ['v4.0.14', 'v4.0.15', 'v5.1.1', 'v5.2.1', 'v5.0.3']
-    name: test_${{ matrix.python-version }}_tidb_${{ matrix.tidb-version }}
+        pythonVersion:
+          - 'py37'
+          - 'py38'
+          - 'py39'
+          - 'py310'
+          - 'py311'
+        tidbVersion:
+          - 'v4.0.14'
+          - 'v4.0.15'
+          - 'v5.1.1'
+          - 'v5.2.1'
+          - 'v5.0.3'
+    name: test_${{ matrix.pythonVersion }}_tidb_${{ matrix.tidbVersion }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: docker://hawkingrei/tind:${{ matrix.tidb-version }}
+      - uses: docker://hawkingrei/tind:${{ matrix.tidbVersion }}
         name: __all__
         with:
           args: |
-            bash -c "service supervisor start && sleep 10s && mycli -P 4000  -h 127.0.0.1  -u root --execute='create database test_sqlalchemy;create database test_schema;'  && tox -e ${{ matrix.python-version }}"
+            bash -c "service supervisor start && sleep 10s && mycli -P 4000  -h 127.0.0.1  -u root --execute='create database test_sqlalchemy;create database test_schema;'  && tox -e ${{ matrix.pythonVersion }}"
