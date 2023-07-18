@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: docker://hawkingrei/tind:${{ matrix.tidbVersion }}
+      - uses: docker://hawkingrei/tind:{{ matrix.tidbVersion }}
         name: __all__
         with:
           args: |
