@@ -19,17 +19,21 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        pythonVersion:
+        python-version:
+          - 'py38'
           - 'py39'
-        tidbVersion:
+          - 'py310'
+          - 'py311'
+        tidb-version:
           - 'v4.0.15'
           - 'v5.0.3'
-          - 'v5.1.1'
-          - 'v5.2.1'
-    name: test_${{ matrix.pythonVersion }}_tidb_${{ matrix.tidbVersion }}
+          - 'v5.2.2'
+          - 'v6.2.0'
+          - 'v6.5.0'
+    name: test_${{ matrix.python-version }}_tidb_${{ matrix.tidb-version }}
     runs-on: ubuntu-latest
     container:
-      image: hawkingrei/tind:${{ matrix.tidbVersion }}
+      image: hawkingrei/tind:${{ matrix.tidb-version }}
     steps:
       - uses: actions/checkout@v3
       - name: start tidb
@@ -37,4 +41,4 @@ jobs:
       - name: init db
         run: mycli -P 4000  -h 127.0.0.1  -u root --execute='create database test_sqlalchemy;create database test_schema;'
       - name: run test
-        run: tox -e ${{ matrix.pythonVersion }}
+        run: tox -e ${{ matrix.python-version }}
