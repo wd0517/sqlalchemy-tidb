@@ -36,6 +36,8 @@ jobs:
       image: hawkingrei/tind:${{ matrix.tidb-version }}
     steps:
       - uses: actions/checkout@v3
+      - name: cat versions
+        run: cat /versions
       - name: start tidb
         run: service supervisor start && sleep 10s
       - name: init db
