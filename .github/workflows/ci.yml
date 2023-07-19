@@ -23,23 +23,20 @@ jobs:
           - 'py38'
           - 'py39'
           - 'py310'
-          - 'py311'
         tidb-version:
-          - 'v4.0.15'
-          - 'v5.0.3'
-          - 'v5.2.2'
-          - 'v6.2.0'
-          - 'v6.5.0'
+          - 'wangdi4zm/tind:v7.1.0'
     name: test_${{ matrix.python-version }}_tidb_${{ matrix.tidb-version }}
     runs-on: ubuntu-latest
     container:
-      image: hawkingrei/tind:${{ matrix.tidb-version }}
+      image: ${{ matrix.tidb-version }}
     steps:
       - uses: actions/checkout@v3
       - name: cat versions
         run: cat /versions
       - name: start tidb
         run: service supervisor start && sleep 10s
+      - name: get tidb version
+        run: mycli -P 4000  -h 127.0.0.1  -u root --execute='select tidb_version();'
       - name: init db
         run: mycli -P 4000  -h 127.0.0.1  -u root --execute='create database test_sqlalchemy;create database test_schema;'
       - name: run test
